@@ -7,7 +7,7 @@
 
 Summary:	Varnish is a high-performance HTTP accelerator
 Name:		varnish
-Version:	2.0.3
+Version:	2.0.4
 Release:	%mkrel 1
 License:	BSD
 Group:		System/Servers
@@ -140,7 +140,7 @@ exit 0
 %post
 /sbin/chkconfig --add varnish
 /sbin/chkconfig --add varnishlog
-/sbin/chkconfig --add varnishncsa 
+/sbin/chkconfig --add varnishncsa
 
 %preun
 if [ $1 -lt 1 ]; then
@@ -149,7 +149,7 @@ if [ $1 -lt 1 ]; then
     /sbin/service varnishncsa stop > /dev/null 2>&1
     /sbin/chkconfig --del varnish
     /sbin/chkconfig --del varnishlog
-    /sbin/chkconfig --del varnishncsa 
+    /sbin/chkconfig --del varnishncsa
 fi
 
 %if %mdkversion < 200900
