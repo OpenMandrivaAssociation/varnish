@@ -7,7 +7,7 @@
 
 Summary:	Varnish is a high-performance HTTP accelerator
 Name:		varnish
-Version:	2.0.5
+Version:	2.0.6
 Release:	%mkrel 1
 License:	BSD
 Group:		System/Servers
@@ -192,4 +192,3 @@ rm -rf %{buildroot}
 %dir %{_includedir}/varnish
 %{_includedir}/varnish/*.h
 %{_libdir}/pkgconfig/*.pc
-
