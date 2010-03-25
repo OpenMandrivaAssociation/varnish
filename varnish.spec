@@ -7,7 +7,7 @@
 
 Summary:	Varnish is a high-performance HTTP accelerator
 Name:		varnish
-Version:	2.0.6
+Version:	2.1
 Release:	%mkrel 1
 License:	BSD
 Group:		System/Servers
@@ -56,7 +56,7 @@ This package provides the development files for varnish.
 %prep
 
 %setup -q
-%patch0
+%patch0 -p1
 
 # Hack to get 32- and 64-bits tests run concurrently on the same build machine
 case `uname -m` in
