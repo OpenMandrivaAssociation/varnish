@@ -22,6 +22,7 @@ Source6:	default.vcl
 Patch0:		varnish.varnishtest_debugflag.patch
 BuildRequires:	ncurses-devel
 BuildRequires:	libxslt-proc
+BuildRequires:	pcre-devel
 BuildRequires:	groff
 # Varnish actually needs gcc installed to work. It uses the C compiler 
 # at runtime to compile the VCL configuration files. This is by design.
