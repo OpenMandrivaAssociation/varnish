@@ -7,7 +7,7 @@
 
 Summary:	Varnish is a high-performance HTTP accelerator
 Name:		varnish
-Version:	2.1
+Version:	2.1.3
 Release:	%mkrel 1
 License:	BSD
 Group:		System/Servers
