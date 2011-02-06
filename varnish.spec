@@ -7,12 +7,12 @@
 
 Summary:	Varnish is a high-performance HTTP accelerator
 Name:		varnish
-Version:	2.1.4
+Version:	2.1.5
 Release:	%mkrel 1
 License:	BSD
 Group:		System/Servers
 URL:		http://www.varnish-cache.org/
-Source0:	http://www.varnish-software.com/sites/default/files/varnish-%{version}.tar.gz
+Source0:	http://repo.varnish-cache.org/source/varnish-%{version}.tar.gz
 Source1:	varnish.init
 Source2:	varnishlog.init
 Source3:	varnishncsa.init
