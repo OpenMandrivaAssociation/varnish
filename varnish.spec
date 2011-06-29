@@ -7,7 +7,7 @@
 
 Summary:	Varnish is a high-performance HTTP accelerator
 Name:		varnish
-Version:	2.1.5
+Version:	3.0.0
 Release:	%mkrel 1
 License:	BSD
 Group:		System/Servers
@@ -181,6 +181,14 @@ rm -rf %{buildroot}
 %attr(0755,varnish,varnish) %dir /var/run/varnish
 %{_mandir}/man1/*.1*
 %{_mandir}/man7/*.7*
+%dir %{_libdir}/varnish
+%{_libdir}/varnish/libvarnish.so
+%{_libdir}/varnish/libvarnishcompat.so
+%{_libdir}/varnish/libvcl.so
+%{_libdir}/varnish/libvgz.so
+%dir %{_libdir}/varnish/vmods
+%{_libdir}/varnish/vmods/libvmod_std.so
+%{_mandir}/man3/vmod_std.3*
 
 %files -n %{libname}
 %defattr(-,root,root,-)
