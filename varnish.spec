@@ -8,7 +8,7 @@
 Summary:	Varnish is a high-performance HTTP accelerator
 Name:		varnish
 Version:	3.0.2
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	BSD
 Group:		System/Servers
 URL:		http://www.varnish-cache.org/
