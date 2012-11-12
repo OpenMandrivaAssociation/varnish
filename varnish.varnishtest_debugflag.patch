@@ -1,0 +1,24 @@
+diff -Naur varnish-3.0.0/bin/varnishtest/Makefile.am varnish-3.0.0.oden/bin/varnishtest/Makefile.am
+--- varnish-3.0.0/bin/varnishtest/Makefile.am	2011-06-16 13:24:54.000000000 +0200
++++ varnish-3.0.0.oden/bin/varnishtest/Makefile.am	2011-06-29 09:21:03.132042120 +0200
+@@ -2,7 +2,7 @@
+ 
+ TESTS_PARALLELISM = 3
+ check: varnishtest
+-	./varnishtest -i -j$(TESTS_PARALLELISM) $(srcdir)/tests/*.vtc
++	./varnishtest -v -i -j$(TESTS_PARALLELISM) $(srcdir)/tests/*.vtc
+ 	@echo "==================="
+ 	@echo "All tests succeeded"
+ 	@echo "==================="
+diff -Naur varnish-3.0.0/bin/varnishtest/Makefile.in varnish-3.0.0.oden/bin/varnishtest/Makefile.in
+--- varnish-3.0.0/bin/varnishtest/Makefile.in	2011-06-16 13:35:57.000000000 +0200
++++ varnish-3.0.0.oden/bin/varnishtest/Makefile.in	2011-06-29 09:21:55.993330455 +0200
+@@ -776,7 +776,7 @@
+ 	uninstall-man1
+ 
+ check: varnishtest
+-	./varnishtest -i -j$(TESTS_PARALLELISM) $(srcdir)/tests/*.vtc
++	./varnishtest -v -i -j$(TESTS_PARALLELISM) $(srcdir)/tests/*.vtc
+ 	@echo "==================="
+ 	@echo "All tests succeeded"
+ 	@echo "==================="

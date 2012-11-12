@@ -1,0 +1,8 @@
+sources:
+  "default.vcl:"	cd349a9fc12d90dd9ed9dd84a905a119db913262
+  "varnish-3.0.2.tar.gz:"	906f1536cb7e728d18d9425677907ae723943df7
+  "varnish.init:"	81995e0716996d199ad0edc332692e2eb65f31eb
+  "varnishlog.init:"	7b8317b5128485a529e6ec717e51a78dc383df29
+  "varnish.logrotate:"	ee4cab0042aa212a13bce507dda080f5e3086041
+  "varnishncsa.init:"	189319bb0371cdb4a9bc9722f44becf37999f47d
+  "varnish.sysconfig:"	c4683cd47099280f63aeaf4502ccea5a585aab8a
