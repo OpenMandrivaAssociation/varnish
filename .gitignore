@@ -1,7 +1,0 @@
-default.vcl
-varnish-3.0.2.tar.gz
-varnish.init
-varnishlog.init
-varnish.logrotate
-varnishncsa.init
-varnish.sysconfig
