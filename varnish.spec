@@ -5,7 +5,7 @@
 %define libname %mklibname varnish %{major}
 %define develname %mklibname varnish -d
 
-Summary:	Varnish is a high-performance HTTP accelerator
+Summary:	High-performance HTTP accelerator
 Name:		varnish
 Version:	3.0.3
 Release:	%mkrel 1
