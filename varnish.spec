@@ -8,7 +8,7 @@
 Summary:	High-performance HTTP accelerator
 Name:		varnish
 Version:	3.0.3
-Release:	%mkrel 1
+Release:	2
 License:	BSD
 Group:		System/Servers
 URL:		http://www.varnish-cache.org/
@@ -107,7 +107,6 @@ sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g;
 #make check LD_LIBRARY_PATH="../../lib/libvarnish/.libs:../../lib/libvarnishcompat/.libs:../../lib/libvarnishapi/.libs:../../lib/libvcl/.libs"
 
 %install
-rm -rf %{buildroot}
 
 %makeinstall_std INSTALL="install -p"
 
