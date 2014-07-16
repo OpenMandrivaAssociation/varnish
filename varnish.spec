@@ -1,25 +1,24 @@
-%define _disable_ld_as_needed 1
-%define _disable_ld_no_undefined 1
-
 %define major 1
 %define libname %mklibname varnish %{major}
 %define develname %mklibname varnish -d
 
-Summary:	High-performance HTTP accelerator
+Summary:	Varnish is a high-performance HTTP accelerator
 Name:		varnish
 Version:	3.0.3
-Release:	2
+Release:	16
 License:	BSD
 Group:		System/Servers
 URL:		http://www.varnish-cache.org/
 Source0:	http://repo.varnish-cache.org/source/varnish-%{version}.tar.gz
-Source1:	varnish.init
-Source2:	varnishlog.init
-Source3:	varnishncsa.init
-Source4:	varnish.logrotate
-Source5:	varnish.sysconfig
+Source1:        varnish.service
+Source3:        varnishncsa.service
+Source4:        varnishlog.service
+Source5:	varnish.logrotate
 Source6:	default.vcl
 Patch0:		varnish.varnishtest_debugflag.patch
+Patch1:		varnish-3.0.3-link.patch
+Patch2:		varnish-3.0.3-automake-1.13.patch
+Patch3:		varnish-3.0.3-CVE-2013-4484.patch
 BuildRequires:	ncurses-devel
 BuildRequires:	libxslt-proc
 BuildRequires:	pcre-devel
@@ -27,6 +26,8 @@ BuildRequires:	groff
 # Varnish actually needs gcc installed to work. It uses the C compiler 
 # at runtime to compile the VCL configuration files. This is by design.
 Requires:	gcc
+Requires(post): systemd
+Requires(post): util-linux
 
 %description
 This is the Varnish high-performance HTTP accelerator. Documentation wiki and
@@ -54,9 +55,11 @@ Varnish is a high-performance HTTP accelerator.
 This package provides the development files for varnish.
 
 %prep
-
 %setup -q
 %patch0 -p1
+%patch1 -p0
+%patch2 -p0
+%patch3 -p0
 
 # Hack to get 32- and 64-bits tests run concurrently on the same build machine
 case `uname -m` in
@@ -77,15 +80,11 @@ mkdir examples
 cp bin/varnishd/default.vcl etc/zope-plone.vcl examples
 
 mkdir -p Mandriva
-cp %{SOURCE1} Mandriva/varnish.init
-cp %{SOURCE2} Mandriva/varnishlog.init
-cp %{SOURCE3} Mandriva/varnishncsa.init
-cp %{SOURCE4} Mandriva/varnish.logrotate
-cp %{SOURCE5} Mandriva/varnish.sysconfig
+cp %{SOURCE5} Mandriva/varnish.logrotate
 cp %{SOURCE6} Mandriva/default.vcl
 
 %build
-autoreconf -fis
+autoreconf -fi
 
 %configure2_5x \
     --disable-static \
@@ -98,35 +97,35 @@ sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g;
 
 %make
 
-#check <- 1 of 97 tests failed. dies at bin/varnishtest/tests/v00009.vtc
-#PIDFILE=`ps ax | grep varnish | grep -v "grep varnish"| awk '{ print $1 }'`
-#if ! [ -z "$PIDFILE" ]; then
-#    kill -9 $PIDFILE
-#fi
-#LD_LIBRARY_PATH="lib/libvarnish/.libs:lib/libvarnishcompat/.libs:lib/libvarnishapi/.libs:lib/libvcl/.libs" bin/varnishd/varnishd -b 127.0.0.1:8000 -C -n `pwd`/foo
-#make check LD_LIBRARY_PATH="../../lib/libvarnish/.libs:../../lib/libvarnishcompat/.libs:../../lib/libvarnishapi/.libs:../../lib/libvcl/.libs"
-
 %install
+
 %makeinstall_std INSTALL="install -p"
 
-install -d %{buildroot}%{_initrddir}
-install -d %{buildroot}%{_sysconfdir}/sysconfig
 install -d %{buildroot}%{_sysconfdir}/varnish
 install -d %{buildroot}%{_sysconfdir}/logrotate.d
 install -d %{buildroot}/var/lib/varnish
 install -d %{buildroot}/var/log/varnish
-install -d %{buildroot}/var/run/varnish
 
-install -m0755 Mandriva/varnish.init %{buildroot}%{_initrddir}/varnish
-install -m0755 Mandriva/varnishlog.init %{buildroot}%{_initrddir}/varnishlog
-install -m0755 Mandriva/varnishncsa.init %{buildroot}%{_initrddir}/varnishncsa
-
-install -m0644 Mandriva/varnish.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/varnish
+mkdir -p %{buildroot}%{_unitdir}
+install -D -m 0644 %SOURCE1 %{buildroot}%{_unitdir}/varnish.service
+install -D -m 0644 %SOURCE3 %{buildroot}%{_unitdir}/varnishncsa.service
+install -D -m 0644 %SOURCE4 %{buildroot}%{_unitdir}/varnishlog.service
 install -m0644 Mandriva/varnish.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/varnish
 install -m0644 Mandriva/default.vcl %{buildroot}%{_sysconfdir}/varnish/default.vcl
 
 # cleanup
 find %{buildroot}/%{_libdir}/ -name '*.la' -exec rm -f {} ';'
+
+mkdir -p %{buildroot}%{_tmpfilesdir}
+cat <<EOF > %{buildroot}%{_tmpfilesdir}/%{name}.conf
+d /run/varnish 0755 varnish varnish
+EOF
+
+# Use the new ld.so.conf.d
+mkdir -p %{buildroot}/%{_sysconfdir}/ld.so.conf.d
+pushd %{buildroot}/%{_sysconfdir}/ld.so.conf.d
+echo "%{_libdir}/varnish" > %{name}.conf
+popd
 
 %pre
 getent group varnish >/dev/null || groupadd -r varnish
@@ -136,35 +135,35 @@ getent passwd varnish >/dev/null || \
 exit 0
 
 %post
-/sbin/chkconfig --add varnish
-/sbin/chkconfig --add varnishlog
-/sbin/chkconfig --add varnishncsa
+if [ ! -f %{_sysconfdir}/%{name}/secret ]; then
+	uuidgen > %{_sysconfdir}/%{name}/secret
+	chown %{name}:adm %{_sysconfdir}/%{name}/secret
+	chmod 0660 %{_sysconfdir}/%{name}/secret
+
+	# While not strictly related, we also need to fix storage permissions from
+	# older versions and the lack of a secret file is a good indicator
+	find /var/lib/%{name}/ -uid 0 -exec chown %{name}:%{name} {} \;
+fi
+%_tmpfilescreate %{name}
+%_post_service %{name} %{name} varnishlog varnishncsa
 
 %preun
-if [ $1 -lt 1 ]; then
-    /sbin/service varnish stop > /dev/null 2>&1
-    /sbin/service varnishlog stop > /dev/null 2>&1
-    /sbin/service varnishncsa stop > /dev/null 2>&1
-    /sbin/chkconfig --del varnish
-    /sbin/chkconfig --del varnishlog
-    /sbin/chkconfig --del varnishncsa
-fi
-
+%_preun_service %{name} %{name} varnishlog varnishncsa
 
 %files
 %doc INSTALL README ChangeLog examples
-%config(noreplace) %{_sysconfdir}/sysconfig/varnish
 %config(noreplace) %{_sysconfdir}/logrotate.d/varnish
 %dir %{_sysconfdir}/varnish
 %config(noreplace) %{_sysconfdir}/varnish/default.vcl
-%{_initrddir}/varnish
-%{_initrddir}/varnishlog
-%{_initrddir}/varnishncsa
+%config(noreplace) %{_sysconfdir}/ld.so.conf.d/*
+%{_unitdir}/varnish.service
+%{_unitdir}/varnishncsa.service
+%{_unitdir}/varnishlog.service
+%{_tmpfilesdir}/%{name}.conf
 %{_sbindir}/*
 %{_bindir}/*
 %attr(0755,varnish,varnish) %dir /var/lib/varnish
 %attr(0755,varnish,varnish) %dir /var/log/varnish
-%attr(0755,varnish,varnish) %dir /var/run/varnish
 %{_mandir}/man1/*.1*
 %{_mandir}/man7/*.7*
 %dir %{_libdir}/varnish
@@ -185,3 +184,4 @@ fi
 %dir %{_includedir}/varnish
 %{_includedir}/varnish/*.h
 %{_libdir}/pkgconfig/*.pc
+

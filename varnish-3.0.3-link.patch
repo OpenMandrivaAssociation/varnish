@@ -1,0 +1,44 @@
+--- lib/libvarnishcompat/Makefile.am.link	2012-12-01 16:08:00.381408648 +0800
++++ lib/libvarnishcompat/Makefile.am	2012-12-01 16:08:00.391408953 +0800
+@@ -4,7 +4,7 @@
+ 
+ pkglib_LTLIBRARIES = libvarnishcompat.la
+ 
+-libvarnishcompat_la_LDFLAGS = -avoid-version
++libvarnishcompat_la_LDFLAGS = -module -avoid-version
+ 
+ libvarnishcompat_la_SOURCES = \
+ 	daemon.c \
+--- lib/libvarnish/Makefile.am.link	2012-12-01 16:08:00.391408953 +0800
++++ lib/libvarnish/Makefile.am	2012-12-01 16:08:00.391408953 +0800
+@@ -2,7 +2,7 @@
+ 
+ pkglib_LTLIBRARIES = libvarnish.la
+ 
+-libvarnish_la_LDFLAGS = -avoid-version
++libvarnish_la_LDFLAGS = -module -avoid-version
+ 
+ libvarnish_la_SOURCES = \
+ 	argv.c \
+--- lib/libvcl/Makefile.am.link	2012-12-01 16:08:00.391408953 +0800
++++ lib/libvcl/Makefile.am	2012-12-01 16:08:00.401409256 +0800
+@@ -4,7 +4,7 @@
+ 
+ pkglib_LTLIBRARIES = libvcl.la
+ 
+-libvcl_la_LDFLAGS = -avoid-version
++libvcl_la_LDFLAGS = -module -avoid-version
+ 
+ libvcl_la_SOURCES = \
+ 	vcc_priv.h \
+--- lib/libvgz/Makefile.am.link	2012-12-01 16:08:00.401409256 +0800
++++ lib/libvgz/Makefile.am	2012-12-01 16:08:00.401409256 +0800
+@@ -2,7 +2,7 @@
+ 
+ pkglib_LTLIBRARIES = libvgz.la
+ 
+-libvgz_la_LDFLAGS = -avoid-version
++libvgz_la_LDFLAGS = -module -avoid-version
+ libvgz_la_CFLAGS = -D_LARGEFILE64_SOURCE=1 $(libvgz_extra_cflags)
+ 
+ libvgz_la_SOURCES = \

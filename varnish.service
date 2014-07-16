@@ -1,0 +1,19 @@
+[Unit]
+Description=Varnish a high-perfomance HTTP accelerator
+After=network.target
+ConditionPathExists=/etc/varnish/secret
+
+[Service]
+LimitNOFILE=131072
+LimitMEMLOCK=82000
+LimitCORE=infinity
+Type=forking
+PIDFile=/run/varnish/varnish.pid
+PrivateTmp=true
+User=varnish
+Group=varnish
+Environment=ADDRESS= PORT=6081 STORAGE=file,/var/lib/varnish/varnish_storage.bin,1G
+ExecStart=/usr/sbin/varnishd -P /run/varnish/varnish.pid -f /etc/varnish/default.vcl -a ${ADDRESS}:${PORT} -T 127.0.0.1:6082 -t 120 -w 5,1000,120 -S /etc/varnish/secret -s $STORAGE
+
+[Install]
+WantedBy=multi-user.target

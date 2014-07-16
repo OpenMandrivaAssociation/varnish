@@ -1,0 +1,19 @@
+--- configure.ac~	2012-08-20 17:20:40.000000000 +0800
++++ configure.ac	2013-01-08 10:25:12.179906968 +0800
+@@ -4,7 +4,7 @@
+ AC_REVISION([$Id$])
+ AC_INIT([Varnish], [3.0.3], [varnish-dev@varnish-cache.org])
+ AC_CONFIG_SRCDIR(include/varnishapi.h)
+-AM_CONFIG_HEADER(config.h)
++AC_CONFIG_HEADERS(config.h)
+ 
+ # save command line CFLAGS for use in VCC_CC (to pass through things like -m64)
+ OCFLAGS="$CFLAGS"
+@@ -17,7 +17,6 @@
+ # Checks for programs.
+ AC_GNU_SOURCE
+ AC_PROG_CC
+-AC_PROG_CC_STDC
+ if test "x$ac_cv_prog_cc_c99" = "xno" || test "x$ac_cv_prog_cc_c99" = "x"; then
+ # We might be on RHEL5 with a git checkout and so broken
+ # autoconf. Check if CC is gcc and if it bails when given -std=gnu99.
