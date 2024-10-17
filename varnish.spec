@@ -8,7 +8,7 @@ Version:	3.0.3
 Release:	17
 License:	BSD
 Group:		System/Servers
-URL:		http://www.varnish-cache.org/
+URL:		https://www.varnish-cache.org/
 Source0:	http://repo.varnish-cache.org/source/varnish-%{version}.tar.gz
 Source1:        varnish.service
 Source3:        varnishncsa.service
